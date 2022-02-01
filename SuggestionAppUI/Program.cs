@@ -1,11 +1,18 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using SuggestionAppUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor();
+//builder.Services.AddRazorPages(); default code
+//builder.Services.AddServerSideBlazor(); default code
+
+//this custom extension ConfigureServices class is replacing the default code commented out above that I have moved to the custom
+//class. Main reason for this is that lots of services will need to be injected so want to make it more managable in a separate
+//class and have one call to that class here.
+
+builder.ConfigureServices();
 
 var app = builder.Build();
 
