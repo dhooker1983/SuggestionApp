@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "643b34f6-d1c0-455a-9257-67a752707e1c": {
+      "ProjectGuid": "643b34f6-d1c0-455a-9257-67a752707e1c",
+      "DisplayName": "SuggestionAppUI",
+      "ColorIndex": 0
+    },
+    "08fd50cd-04ee-40bf-98de-409910ba9ca0": {
+      "ProjectGuid": "08fd50cd-04ee-40bf-98de-409910ba9ca0",
+      "DisplayName": "SuggestionAppLibrary",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
