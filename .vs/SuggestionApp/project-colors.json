@@ -10,6 +10,11 @@
       "ProjectGuid": "08fd50cd-04ee-40bf-98de-409910ba9ca0",
       "DisplayName": "SuggestionAppLibrary",
       "ColorIndex": 1
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
     }
   },
   "NextColorIndex": 2
