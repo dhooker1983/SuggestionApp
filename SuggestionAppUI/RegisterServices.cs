@@ -8,9 +8,14 @@
         {
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
+
             builder.Services.AddMemoryCache();
+
+            builder.Services.Configure<CosmosDbOptions>(builder.Configuration.GetSection("CosmosDb"));
+
+            CosmosClient cosmosClient = new CosmosClient(builder.Configuration.GetValue<string>("CosmosDb:CosmosDbConnection"));
+            builder.Services.AddSingleton(cosmosClient);
             
-            //cosmosdb
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿
+﻿using Newtonsoft.Json;
+
 namespace SuggestionAppLibrary.Models
 {
     public class BasicUser
     {
+        [JsonProperty(PropertyName = "basicuserid")]
         public string BasicUserId { get; set; }
         public string DisplayName { get; set; }
 

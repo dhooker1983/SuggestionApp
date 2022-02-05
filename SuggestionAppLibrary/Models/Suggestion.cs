@@ -1,8 +1,10 @@
-﻿
+﻿using Newtonsoft.Json;
+
 namespace SuggestionAppLibrary.Models
 {
     public class Suggestion
     {
+        [JsonProperty(PropertyName = "suggestionid")]
         public string SuggestionId { get; set; }
         public string SuggestionText { get; set; }
         public string Description { get; set; }
