@@ -5,7 +5,7 @@ namespace SuggestionAppLibrary.DataAccess
 {
     public interface IUserData
     {
-        Task<User> CreateUserAsync(User model);
+        Task CreateUserAsync(User model);
         Task<User> GetUserAsync(string id);
         Task<User> GetUserFromAuthentication(string objectId);
         Task<List<User>> GetUsersAsync();

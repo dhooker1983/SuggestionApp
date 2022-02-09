@@ -11,7 +11,8 @@ namespace SuggestionAppLibrary.Models
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
         public Category Category { get; set; }
         public string Author { get; set; }
-        
+        public string Type { get; set; } = "suggestion";
+
         //HashSet is similar to list but only holds UNIQUE values. 
         public HashSet<string> UserVotes { get; set; }
 

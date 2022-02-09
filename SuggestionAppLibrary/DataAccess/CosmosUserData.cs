@@ -16,9 +16,9 @@ namespace SuggestionAppLibrary.DataAccess
             _partitionKey = _cosmosDbService.PartitionKey;
         }
 
-        public async Task<User> CreateUserAsync(User model)
+        public async Task CreateUserAsync(User model)
         {
-            return await _container.CreateItemAsync(model);
+             await _container.CreateItemAsync(model);
         }
 
         public async Task<User> GetUserAsync(string id)

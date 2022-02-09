@@ -1,27 +1,28 @@
 ﻿
 namespace SuggestionAppLibrary.DataAccess
 {
-    public class CosmosCategoryData : ICategoryData
+    public class CosmosStatusData
     {
-        private readonly ICosmosDbService _cosmosDbService;
         private readonly IMemoryCache _cache;
+        private readonly ICosmosDbService _cosmosDbService;
         private readonly Container _container;
-        private const string CacheName = "CategoryData";
+        private readonly string CacheName = "StatusData";
 
-        public CosmosCategoryData(ICosmosDbService cosmos, IMemoryCache cache)
+        public CosmosStatusData(ICosmosDbService cosmos, IMemoryCache cache)
         {
             _cache = cache;
             _cosmosDbService = cosmos;
-            _container = _cosmosDbService.CategoriesContainer;
+            _container = _cosmosDbService.StatusesContainer;
         }
 
-        public async Task<List<Category>> GetCategoriesAsync()
+        public async Task<List<Status>> GetStatusesAsync()
         {
-            var output = _cache.Get<List<Category>>(CacheName);
-            if (output == null)
+            var output = _cache.Get<List<Status>>(CacheName);
+
+            if(output == null)
             {
                 var query = new QueryDefinition("SELECT * FROM c");
-                var items = _container.GetItemQueryIterator<Category>(query);
+                var items = _container.GetItemQueryIterator<Status>(query);
 
                 while (items.HasMoreResults)
                 {
@@ -35,7 +36,7 @@ namespace SuggestionAppLibrary.DataAccess
             return output;
         }
 
-        public async Task Create(Category model)
+        public async Task CreateStatusAsync(Status model)
         {
             await _container.CreateItemAsync(model);
         }
