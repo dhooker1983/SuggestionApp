@@ -45,7 +45,6 @@ C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppUI\obj\Debug\net6.0\Sugge
 C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppUI\obj\Debug\net6.0\SuggestionAppUI.AssemblyInfoInputs.cache
 C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppUI\obj\Debug\net6.0\SuggestionAppUI.AssemblyInfo.cs
 C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppUI\obj\Debug\net6.0\SuggestionAppUI.csproj.CoreCompileInputs.cache
-C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppUI\obj\Debug\net6.0\SuggestionAppUI.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppUI\obj\Debug\net6.0\SuggestionAppUI.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppUI\obj\Debug\net6.0\SuggestionAppUI.RazorAssemblyInfo.cache
 C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppUI\obj\Debug\net6.0\SuggestionAppUI.RazorAssemblyInfo.cs

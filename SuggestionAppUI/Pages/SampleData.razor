@@ -1,0 +1,140 @@
+﻿@page "/sampledata"
+@inject ICategoryData categoryData
+@inject IStatusData statusData
+@inject IUserData userData
+@inject ISuggestionData suggestionData
+@using User = SuggestionAppLibrary.Models.User;
+
+<h3 class="mt-2">Sample Data</h3>
+
+
+@if (categoriesCreated)
+{
+    <h4>Categories have been created</h4>
+}
+else
+{
+    <button class="btn btn-danger m-1" @onclick="CreateCategories">Created Categories</button>
+}
+
+@if(statusesCreated)
+{
+    <h4>Statuses have been created</h4>
+}
+else
+{
+    <button class="btn btn-primary m-1" @onclick="CreateStatuses">Create Statuses</button>
+}
+
+
+
+@code {
+    private bool categoriesCreated = false;
+    private bool statusesCreated = false;
+
+    private async Task GenerateSampleData()
+    {
+        User user = new()
+            {
+                FirstName = "David",
+                LastName = "Hooker",
+                DisplayName = "WolfmanSample",
+                Email = "dave@test.com",
+                ObjectIdentifier = "anc-123"
+            };
+
+        await userData.CreateUserAsync(user);
+
+        var foundUser = await userData.GetUserFromAuthentication("anc-123");
+        var categories = await categoryData.GetCategoriesAsync();
+        var status = await statusData.GetStatusesAsync();
+        var suggestion = new Suggestion()
+            {
+                Author = new BasicUser(foundUser),
+                Category = categories[0],
+                SuggestionText = "first suggestion",
+                Description = "first one"
+            };
+    }
+
+    private async Task CreateCategories()
+    {
+        //var categories = await categoryData.GetCategoriesAsync();
+
+        //if(categories?.Count > 0)
+        //{
+        //    return;
+        //}
+
+        Category cat = new()
+            {
+                CategoryName = "Courses",
+                CategoryDescription = "Full paid courses",
+                CategoryId = "1"
+            };
+
+
+        Category cat2 = new()
+            {
+                CategoryName = "Dev Questions",
+                CategoryDescription = "Advice on being a developer",
+                CategoryId = "2"
+            };
+
+
+        Category cat3 = new()
+            {
+                CategoryName = "In-Depth Tutorial",
+                CategoryDescription = "A deep-dive video on how to use a topic",
+                CategoryId = "3"
+            };
+
+
+        categoriesCreated = true;
+    }
+
+    private async Task CreateStatuses()
+    {
+        //var statuses = await statusData.GetStatusesAsync();
+
+        //if(statuses?.Count > 0)
+        //{
+        //    return;
+        //}
+
+        Status stat = new()
+            {
+                StatusName = "Completed",
+                StatusDescription = "Description",
+                StatusId = "1"
+            };
+
+
+        stat = new()
+            {
+                StatusName = "Watching",
+                StatusDescription = "Description",
+                StatusId = "2"
+            };
+
+
+        stat = new()
+            {
+                StatusName = "Upcoming",
+                StatusDescription = "Description",
+                StatusId = "3"
+            };
+
+
+        stat = new()
+            {
+                StatusName = "Dismissed",
+                StatusDescription = "Description",
+                StatusId = "4"
+            };
+
+
+        statusesCreated = true;
+    }
+
+}

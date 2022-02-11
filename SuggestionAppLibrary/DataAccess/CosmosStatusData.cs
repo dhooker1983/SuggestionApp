@@ -1,12 +1,12 @@
 ﻿
 namespace SuggestionAppLibrary.DataAccess
 {
-    public class CosmosStatusData
+    public class CosmosStatusData : IStatusData
     {
         private readonly IMemoryCache _cache;
         private readonly ICosmosDbService _cosmosDbService;
         private readonly Container _container;
-        private readonly string CacheName = "StatusData";
+        private const string CacheName = "StatusData";
 
         public CosmosStatusData(ICosmosDbService cosmos, IMemoryCache cache)
         {
@@ -19,7 +19,7 @@ namespace SuggestionAppLibrary.DataAccess
         {
             var output = _cache.Get<List<Status>>(CacheName);
 
-            if(output == null)
+            if (output == null)
             {
                 var query = new QueryDefinition("SELECT * FROM c");
                 var items = _container.GetItemQueryIterator<Status>(query);
@@ -35,6 +35,7 @@ namespace SuggestionAppLibrary.DataAccess
 
             return output;
         }
+
 
         public async Task CreateStatusAsync(Status model)
         {

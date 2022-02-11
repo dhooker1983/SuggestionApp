@@ -52,7 +52,7 @@ namespace SuggestionAppLibrary.DataAccess
 
         public async Task<User> UpdateUserAsync(User model)
         {
-            return await _container.UpsertItemAsync(model);
+            return await _container.UpsertItemAsync(model, _partitionKey);
         }
 
 
