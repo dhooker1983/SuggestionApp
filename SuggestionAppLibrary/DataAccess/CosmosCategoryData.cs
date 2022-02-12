@@ -17,7 +17,9 @@ namespace SuggestionAppLibrary.DataAccess
 
         public async Task<List<Category>> GetCategoriesAsync()
         {
+            var list = new List<Category>();
             var output = _cache.Get<List<Category>>(CacheName);
+
             if (output == null)
             {
                 var query = new QueryDefinition("SELECT * FROM c");
@@ -26,13 +28,13 @@ namespace SuggestionAppLibrary.DataAccess
                 while (items.HasMoreResults)
                 {
                     var docs = await items.ReadNextAsync();
-                    output.AddRange(docs);
+                    list.AddRange(docs);
                 }
 
-                _cache.Set(CacheName, output, TimeSpan.FromDays(1));
+                _cache.Set(CacheName, list, TimeSpan.FromDays(1));
             }
 
-            return output;
+            return list;
         }
 
         public async Task Create(Category model)

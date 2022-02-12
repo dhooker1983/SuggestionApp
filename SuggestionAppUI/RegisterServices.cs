@@ -1,4 +1,6 @@
-﻿namespace SuggestionAppUI
+﻿
+
+namespace SuggestionAppUI
 {
     public static class RegisterServices
     {
@@ -15,7 +17,7 @@
 
             CosmosClient cosmosClient = new CosmosClient(builder.Configuration.GetValue<string>("CosmosDb:CosmosDbConnection"));
             builder.Services.AddSingleton(cosmosClient);
-            
+
             builder.Services.AddSingleton<ICosmosDbService, CosmosDbService>();
             builder.Services.AddSingleton<ICategoryData, CosmosCategoryData>();
             builder.Services.AddSingleton<IStatusData, CosmosStatusData>();

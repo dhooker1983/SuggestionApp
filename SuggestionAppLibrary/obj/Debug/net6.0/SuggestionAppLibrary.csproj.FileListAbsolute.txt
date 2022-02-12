@@ -11,3 +11,4 @@ C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppLibrary\obj\Debug\net6.0\
 C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppLibrary\obj\Debug\net6.0\SuggestionAppLibrary.pdb
 C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppLibrary\bin\Debug\net6.0\Microsoft.Azure.Cosmos.ServiceInterop.dll
 C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppLibrary\bin\Debug\net6.0\Cosmos.CRTCompat.dll
+C:\Users\dghoo\source\repos\SuggestionApp\SuggestionAppLibrary\obj\Debug\net6.0\SuggestionAppLibrary.csproj.AssemblyReference.cache

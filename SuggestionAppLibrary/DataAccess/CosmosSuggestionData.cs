@@ -1,7 +1,4 @@
 ﻿
-using Microsoft.Extensions.Options;
-using System.Collections.ObjectModel;
-
 namespace SuggestionAppLibrary.DataAccess
 {
     public class CosmosSuggestionData : ISuggestionData

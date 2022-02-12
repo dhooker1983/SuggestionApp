@@ -3,6 +3,8 @@
 @inject IStatusData statusData
 @inject IUserData userData
 @inject ISuggestionData suggestionData
+
+
 @using User = SuggestionAppLibrary.Models.User;
 
 <h3 class="mt-2">Sample Data</h3>
@@ -59,12 +61,12 @@ else
 
     private async Task CreateCategories()
     {
-        //var categories = await categoryData.GetCategoriesAsync();
+        var categories = await categoryData.GetCategoriesAsync();
 
-        //if(categories?.Count > 0)
-        //{
-        //    return;
-        //}
+        if(categories?.Count > 0)
+        {
+            return;
+        }
 
         Category cat = new()
             {
@@ -95,12 +97,12 @@ else
 
     private async Task CreateStatuses()
     {
-        //var statuses = await statusData.GetStatusesAsync();
+        var statuses = await statusData.GetStatusesAsync();
 
-        //if(statuses?.Count > 0)
-        //{
-        //    return;
-        //}
+        if(statuses?.Count > 0)
+        {
+            return;
+        }
 
         Status stat = new()
             {

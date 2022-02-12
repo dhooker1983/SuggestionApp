@@ -17,6 +17,7 @@ namespace SuggestionAppLibrary.DataAccess
 
         public async Task<List<Status>> GetStatusesAsync()
         {
+            var list = new List<Status>();
             var output = _cache.Get<List<Status>>(CacheName);
 
             if (output == null)
@@ -27,13 +28,13 @@ namespace SuggestionAppLibrary.DataAccess
                 while (items.HasMoreResults)
                 {
                     var docs = await items.ReadNextAsync();
-                    output.AddRange(docs);
+                    list.AddRange(docs);
                 }
 
-                _cache.Set(CacheName, output, TimeSpan.FromDays(1));
+                _cache.Set(CacheName, list, TimeSpan.FromDays(1));
             }
 
-            return output;
+            return list;
         }
 
 
