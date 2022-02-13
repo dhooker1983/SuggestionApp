@@ -22,6 +22,7 @@ namespace SuggestionAppLibrary.DataAccess
 
         public async Task<List<Suggestion>> GetSuggestionsAsync()
         {
+            var list = new List<Suggestion>();
             var output = _cache.Get<List<Suggestion>>(CacheName);
 
             if (output == null)
@@ -33,10 +34,11 @@ namespace SuggestionAppLibrary.DataAccess
                 while (items.HasMoreResults)
                 {
                     var docs = await items.ReadNextAsync();
-                    output.AddRange(docs);
+                    list.AddRange(docs);
                 }
 
-                _cache.Set(CacheName, output, TimeSpan.FromMinutes(1));
+                _cache.Set(CacheName, list, TimeSpan.FromMinutes(1));
+                output = _cache.Get<List<Suggestion>>(CacheName);
             }
 
             return output;

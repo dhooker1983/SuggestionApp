@@ -13,8 +13,9 @@ namespace SuggestionAppLibrary.Models
         public  BasicUser Author { get; set; }
         public string Type { get; set; } = "suggestion";
 
+        [JsonIgnore]
         //HashSet is similar to list but only holds UNIQUE values. 
-        public HashSet<string> UserVotes { get; set; }
+        public HashSet<string>? UserVotes { get; set; }
 
         public Status SuggestionStatus { get; set; }
         public string OwnerNotes { get; set; }

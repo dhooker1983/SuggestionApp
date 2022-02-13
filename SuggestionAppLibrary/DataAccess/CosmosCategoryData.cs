@@ -32,9 +32,10 @@ namespace SuggestionAppLibrary.DataAccess
                 }
 
                 _cache.Set(CacheName, list, TimeSpan.FromDays(1));
+                output = _cache.Get<List<Category>>(CacheName);
             }
 
-            return list;
+            return output;
         }
 
         public async Task Create(Category model)

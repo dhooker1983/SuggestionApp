@@ -34,7 +34,7 @@ namespace SuggestionAppLibrary.DataAccess
                 _cache.Set(CacheName, list, TimeSpan.FromDays(1));
             }
 
-            return list;
+            return output;
         }
 
 
