@@ -17,6 +17,7 @@ namespace SuggestionAppLibrary.DataAccess
             StatusesContainer = _client.GetContainer(_options.DatabaseName, _options.StatusesContainer);
             SuggestionsContainer = _client.GetContainer(_options.DatabaseName, _options.SuggestionsContainer);
             UserContainer = _client.GetContainer(_options.DatabaseName, _options.UsersContainer);
+            PartitionKey = new PartitionKey(_options.PartitionKey);
 
         }
 
@@ -24,7 +25,7 @@ namespace SuggestionAppLibrary.DataAccess
         public Container StatusesContainer { get; private set; }
         public Container SuggestionsContainer { get; private set; }
         public Container UserContainer { get; private set; }
-        public PartitionKey PartitionKey { get; private set; } = new PartitionKey("");
+        public PartitionKey PartitionKey { get; private set; }
 
     }
 }

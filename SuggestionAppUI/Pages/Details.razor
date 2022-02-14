@@ -1,0 +1,96 @@
+﻿
+@page "/Details/{Id}"
+
+@inject ISuggestionData suggestionData
+@inject NavigationManager navManager
+
+<h1>Suggestion Details</h1>
+
+<div>
+    <div>
+        @if(model is not null)
+        {
+            <div>
+                <div>
+                    <div>
+                        <div>@GetUpvoteTopText()</div>
+                        <span class="oi oi-caret-top"></span>
+                        <div>@GetUpvoteBottomText()</div>
+                    </div>
+                    <div>
+                        <div>@model.DateCreated.ToString("MM.dd.yyyy")</div>
+                    </div>
+                </div>
+                <div>
+                    <div>@model.SuggestionText</div>
+                    <div>@model.Author.DisplayName</div>
+                    <div>@model.Description</div>
+                    <div>@model.Category.CategoryName</div>
+                </div>
+                <div>
+                    <button class="btn btn-primary" @onclick="ClosePage">Close</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if(model?.SuggestionStatus is not null)
+{
+    <div>
+        <div>
+            <div></div>
+            <div>
+                <div>
+                    @model.SuggestionStatus.StatusName
+                </div>
+                <div>
+                    @((MarkupString)model.OwnerNotes)
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private Suggestion model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        model = await suggestionData.GetSuggestionAsync(Id);
+    }
+
+    private void ClosePage()
+    {
+        navManager.NavigateTo("/");
+    }
+
+    private string GetUpvoteTopText()
+    {
+        if(model.UserVotes?.Count > 0)
+        {
+            return model.UserVotes.Count.ToString("00");
+        }
+
+        else
+        {
+            return "Click To";
+        }
+    }
+
+    private string GetUpvoteBottomText()
+    {
+        if(model.UserVotes?.Count > 1)
+        {
+            return "Upvotes";
+        }
+
+        else
+        {
+            return "Upvote";
+        }
+    }
+}
