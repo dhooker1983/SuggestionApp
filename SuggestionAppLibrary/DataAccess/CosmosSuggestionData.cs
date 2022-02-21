@@ -44,6 +44,29 @@ namespace SuggestionAppLibrary.DataAccess
             return output;
         }
 
+        public async Task<List<Suggestion>> GetUsersSuggestions(string userId)
+        {
+            var list = new List<Suggestion>();
+            var output = _cache.Get<List<Suggestion>>(userId);
+
+            if(output == null)
+            {
+                var query = new QueryDefinition(string.Format("SELECT * FROM C WHERE c.Author.BasicUserId == {0}", userId));
+                var items = _container.GetItemQueryIterator<Suggestion>(query);
+
+                while (items.HasMoreResults)
+                {
+                    var docs = await items.ReadNextAsync();
+                    list.AddRange(docs);
+                }
+
+                _cache.Set(CacheName, list, TimeSpan.FromMinutes(1));
+                output = _cache.Get<List<Suggestion>>(userId);
+            }
+
+            return output;
+        }
+
         public async Task<List<Suggestion>> GetAllApprovedSuggestionsAsync()
         {
             var output = await GetSuggestionsAsync();

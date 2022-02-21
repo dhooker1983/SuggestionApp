@@ -1,0 +1,20 @@
+﻿@page "/Profile"
+@inject ISuggestionData suggestionData
+@inject IUserData userData
+@inject NavigationManager navManager
+@using SuggestionAppLibrary.Models
+
+@code {
+    private User loggedInUser;
+    private IList<Suggestion> submissions;
+    private IList<Suggestion> approved;
+    private IList<Suggestion> archived;
+    private IList<Suggestion> pending;
+    private IList<Suggestion> rejected;
+
+    protected async override Task OnInitializedAsync()
+    {
+        //TODO - replace with user lookup
+        loggedInUser = await userData.GetUserFromAuthentication("abc-123");
+    }
+}
