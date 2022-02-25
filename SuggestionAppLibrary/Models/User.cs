@@ -4,7 +4,7 @@ namespace SuggestionAppLibrary.Models
 {
     public class User
     {
-        [JsonProperty(PropertyName = "userid")]
+        [JsonProperty(PropertyName = "id")]
         public string UserId { get; set; }
         public string ObjectIdentifier { get; set; }
         public string FirstName { get; set; }

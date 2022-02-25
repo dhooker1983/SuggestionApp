@@ -9,7 +9,7 @@
 
 <h1 class="m-2">Training Suggestions</h1>
 <div>
-    <button class="btn btn-primary m-2" >Suggest</button>
+    <button class="btn btn-primary m-2" @onclick="@CreateCat" >Suggest</button>
 </div>
 
 <div class="row m-1">
@@ -240,5 +240,18 @@
     private void OpenDetails(Suggestion model)
     {
         navManager.NavigateTo($"/Details/{model.SuggestionId}");
+    }
+
+    private void CreateCat()
+    {
+        var cat = new Category
+            {
+                CategoryDescription = "test",
+                CategoryId = "1",
+                CategoryName = "another test",
+                Type = "category"
+            };
+
+        categoryData.Create(cat);
     }
 }
