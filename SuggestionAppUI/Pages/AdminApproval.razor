@@ -1,0 +1,50 @@
+﻿@page "/AdminApproval"
+@inject ISuggestionData suggestionData
+@inject IUserData userData
+@inject NavigationManager navManager
+
+
+
+@code {
+
+    private List<Suggestion> submissions;
+    private Suggestion editingModel;
+    private string currentEditingTitle = "";
+    private string editedTitle = "";
+    private string currentEditingDescription = "";
+    private string editedDescription = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        submissions = await suggestionData.GetAllSuggestionsAwaitingApprovalAsync();
+    }
+
+    private async Task ApproveSubmission(Suggestion submission)
+    {
+        submission.ApprovedForRelease = true;
+        submissions.Remove(submission);
+        await suggestionData.UpdateSuggestionAsync(submission);
+    }
+
+    private async Task RejectSubmission(Suggestion submission)
+    {
+        submission.ApprovedForRelease = false;
+        submissions.Remove(submission);
+        await suggestionData.UpdateSuggestionAsync(submission);
+    }
+
+    private void EditTitle(Suggestion model)
+    {
+        editingModel = model;
+        editedTitle = model.SuggestionText;
+        currentEditingTitle = model.SuggestionId;
+        currentEditingDescription = "";
+    }
+
+    private async Task SaveTitle(Suggestion model)
+    {
+        currentEditingTitle = string.Empty;
+        model.SuggestionText = editedTitle;
+        await suggestionData.UpdateSuggestionAsync(model);
+    }
+}

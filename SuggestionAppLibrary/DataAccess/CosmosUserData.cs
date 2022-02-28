@@ -12,8 +12,8 @@ namespace SuggestionAppLibrary.DataAccess
         public CosmosUserData(ICosmosDbService cosmos)
         {
             _cosmosDbService = cosmos;
-            _container = _cosmosDbService.StatusesContainer;
-            _partitionKey = _cosmosDbService.PartitionKey;
+            _container = _cosmosDbService.UserContainer;
+            _partitionKey = new PartitionKey("user");
         }
 
         public async Task CreateUserAsync(User model)

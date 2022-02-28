@@ -51,7 +51,7 @@ namespace SuggestionAppLibrary.DataAccess
 
             if(output == null)
             {
-                var query = new QueryDefinition(string.Format("SELECT * FROM C WHERE c.Author.BasicUserId == {0}", userId));
+                var query = new QueryDefinition(string.Format("SELECT * FROM c   WHERE c.Author.BasicUserId = {0}", userId));
                 var items = _container.GetItemQueryIterator<Suggestion>(query);
 
                 while (items.HasMoreResults)
@@ -60,7 +60,7 @@ namespace SuggestionAppLibrary.DataAccess
                     list.AddRange(docs);
                 }
 
-                _cache.Set(CacheName, list, TimeSpan.FromMinutes(1));
+                _cache.Set(userId, list, TimeSpan.FromMinutes(1));
                 output = _cache.Get<List<Suggestion>>(userId);
             }
 
