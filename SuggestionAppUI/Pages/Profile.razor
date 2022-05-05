@@ -1,4 +1,6 @@
 ﻿@page "/Profile"
+@attribute [Authorize]
+@inject AuthenticationStateProvider authProvider
 @inject ISuggestionData suggestionData
 @inject IUserData userData
 @inject NavigationManager navManager
@@ -16,7 +18,7 @@
 <div>
     <h2 class="m-1">My Account</h2>
     <p>
-        <a href="#">Edit My Profile</a>
+        <a href="MicrosoftIdentity/Account/EditProfile">Edit My Profile</a>
     </p>
 </div>
 
@@ -31,27 +33,27 @@
         {
             <hr />
             <div>
-                @s.SuggestionText
+                @s.suggestiontext
             </div>
             <p>
-                @s.DateCreated.ToString("MM.dd.yyyy")
+                @s.datecreated.ToString("MM.dd.yyyy")
             </p>
             <p>
                 Total Votes: @*@s.UserVotes.Count*@
             </p>
             <p>
-                @s.Category.CategoryName
+                @s.category.CategoryName
             </p>
             <p>
-                @s.Description
+                @s.description
             </p>
-            @if (s.SuggestionStatus is not null)
+            @if (s.suggestionstatus is not null)
             {
                 <div>
-                    @s.SuggestionStatus.StatusName
+                    @s.suggestionstatus.StatusName
                 </div>
                 <p>
-                    @((MarkupString)s.OwnerNotes)
+                    @((MarkupString)s.ownernotes)
                 </p>
             }
 
@@ -70,27 +72,27 @@
         {
             <hr />
             <div>
-                @s.SuggestionText
+                @s.suggestiontext
             </div>
             <p>
-                @s.DateCreated.ToString("MM.dd.yyyy")
+                @s.datecreated.ToString("MM.dd.yyyy")
             </p>
             <p>
                 Total Votes: @*@s.UserVotes.Count*@
             </p>
             <p>
-                @s.Category.CategoryName
+                @s.category.CategoryName
             </p>
             <p>
-                @s.Description
+                @s.description
             </p>
-            @if (s.SuggestionStatus is not null)
+            @if (s.suggestionstatus is not null)
             {
                 <div>
-                    @s.SuggestionStatus.StatusName
+                    @s.suggestionstatus.StatusName
                 </div>
                 <p>
-                    @((MarkupString)s.OwnerNotes)
+                    @((MarkupString)s.ownernotes)
                 </p>
             }
 
@@ -105,27 +107,27 @@
         {
             <hr />
             <div>
-                @s.SuggestionText
+                @s.suggestiontext
             </div>
             <p>
-                @s.DateCreated.ToString("MM.dd.yyyy")
+                @s.datecreated.ToString("MM.dd.yyyy")
             </p>
             <p>
                 Total Votes: @*@s.UserVotes.Count*@
             </p>
             <p>
-                @s.Category.CategoryName
+                @s.category.CategoryName
             </p>
             <p>
-                @s.Description
+                @s.description
             </p>
-            @if (s.SuggestionStatus is not null)
+            @if (s.suggestionstatus is not null)
             {
                 <div>
-                    @s.SuggestionStatus.StatusName
+                    @s.suggestionstatus.StatusName
                 </div>
                 <p>
-                    @((MarkupString)s.OwnerNotes)
+                    @((MarkupString)s.ownernotes)
                 </p>
             }
 
@@ -140,27 +142,27 @@
         {
             <hr />
             <div>
-                @s.SuggestionText
+                @s.suggestiontext
             </div>
             <p>
-                @s.DateCreated.ToString("MM.dd.yyyy")
+                @s.datecreated.ToString("MM.dd.yyyy")
             </p>
             <p>
                 Total Votes: @*@s.UserVotes.Count*@
             </p>
             <p>
-                @s.Category.CategoryName
+                @s.category.CategoryName
             </p>
             <p>
-                @s.Description
+                @s.description
             </p>
-            @if (s.SuggestionStatus is not null)
+            @if (s.suggestionstatus is not null)
             {
                 <div>
-                    @s.SuggestionStatus.StatusName
+                    @s.suggestionstatus.StatusName
                 </div>
                 <p>
-                    @((MarkupString)s.OwnerNotes)
+                    @((MarkupString)s.ownernotes)
                 </p>
             }
 
@@ -178,25 +180,24 @@
 
     protected async override Task OnInitializedAsync()
     {
-        //TODO - replace with user lookup
-        loggedInUser = await userData.GetUserFromAuthentication("1");
+        loggedInUser = await authProvider.GetUserFromAuth(userData);
 
         var results = await suggestionData.GetUsersSuggestions(loggedInUser.UserId);
 
         if(loggedInUser is not null && results is not null)
         {
-            submissions = results.OrderByDescending(s => s.DateCreated).ToList();
-            approved = submissions.Where(s => s.ApprovedForRelease == true && 
-                                    s.Archived == false && 
-                                    s.Rejected == false)
+            submissions = results.OrderByDescending(s => s.datecreated).ToList();
+            approved = submissions.Where(s => s.approvedforrelease == true && 
+                                    s.archived == false && 
+                                    s.rejected == false)
                                     .ToList();
-            archived = submissions.Where(s => s.Archived == true && 
-                                    s.Rejected == false)
+            archived = submissions.Where(s => s.archived == true && 
+                                    s.rejected == false)
                                     .ToList();
-            pending = submissions.Where(s => s.ApprovedForRelease == false && 
-                                    s.Rejected == false)
+            pending = submissions.Where(s => s.approvedforrelease == false && 
+                                    s.rejected == false)
                                     .ToList();
-            rejected = submissions.Where(s => s.Rejected == true)
+            rejected = submissions.Where(s => s.rejected == true)
                                     .ToList();
         }
     }

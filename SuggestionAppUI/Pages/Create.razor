@@ -1,7 +1,9 @@
 ﻿@page "/Create"
+@attribute [Authorize]
 @using SuggestionAppUI.Models
 @using SuggestionAppLibrary.Models
 @using SuggestionAppUI.Components
+@inject AuthenticationStateProvider authProvider
 @inject ICategoryData categoryData
 @inject ISuggestionData suggestionData
 @inject IUserData userData
@@ -66,18 +68,7 @@
     protected async override Task OnInitializedAsync()
     {
         categories = await categoryData.GetCategoriesAsync();
-
-        //TODO - replace with user lookup.
-        //loggedInUser = await userData.GetUserFromAuthentication();
-        loggedInUser = new User
-            {
-                FirstName = "Sample",
-                LastName = "Sample",
-                DisplayName = "SS",
-                Email = "sample@test.com",
-                ObjectIdentifier = "",
-                UserId = "1"
-            };
+        loggedInUser = await authProvider.GetUserFromAuth(userData);
     }
 
     private void ClosePage()
@@ -89,12 +80,12 @@
     {
         Suggestion s = new Suggestion();
 
-        s.SuggestionText = suggestion.Suggestion;
-        s.Description = suggestion.Description;
-        s.Author = new BasicUser(loggedInUser);
-        s.Category = categories.Where(c => c.CategoryId == suggestion.CategoryId).FirstOrDefault();
+        s.suggestiontext = suggestion.Suggestion;
+        s.description = suggestion.Description;
+        s.author = new BasicUser(loggedInUser);
+        s.category = categories.Where(c => c.CategoryId == suggestion.CategoryId).FirstOrDefault();
 
-        if(s.Category is null)
+        if(s.category is null)
         {
             suggestion.CategoryId = "";
             return;

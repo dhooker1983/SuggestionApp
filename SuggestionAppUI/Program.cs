@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Rewrite;
 using SuggestionAppUI;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,25 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+//these two are added after app.UseRouting. Authentication first!!
+app.UseAuthentication();
+app.UseAuthorization();
+
+//this overrides the default redirect to the sign out page, instead you are signed out and redirected to home page.
+app.UseRewriter(
+    new RewriteOptions().Add(
+        context =>
+        {
+            if (context.HttpContext.Request.Path == "/MicrosoftIdentity/Account/SignedOut")
+            {
+                context.HttpContext.Response.Redirect("/");
+            }
+        }));
+
+//these are the MVC controllers, needed as the authentication system uses MVC style controllers, therefore have to add 
+//routing for them.
+app.MapControllers();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

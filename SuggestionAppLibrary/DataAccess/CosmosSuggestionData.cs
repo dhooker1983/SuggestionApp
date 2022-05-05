@@ -28,7 +28,7 @@ namespace SuggestionAppLibrary.DataAccess
             if (output == null)
             {
                 //has tested this query
-                var query = new QueryDefinition("SELECT * FROM c WHERE c.archived = 'false'");
+                var query = new QueryDefinition("SELECT * FROM c WHERE c.archived = false");
                 var items = _container.GetItemQueryIterator<Suggestion>(query);
 
                 while (items.HasMoreResults)
@@ -51,7 +51,7 @@ namespace SuggestionAppLibrary.DataAccess
 
             if(output == null)
             {
-                var query = new QueryDefinition(string.Format("SELECT * FROM c   WHERE c.Author.BasicUserId = {0}", userId));
+                var query = new QueryDefinition(string.Format("SELECT * FROM c   WHERE c.author.id = '{0}'", userId));
                 var items = _container.GetItemQueryIterator<Suggestion>(query);
 
                 while (items.HasMoreResults)
@@ -71,7 +71,7 @@ namespace SuggestionAppLibrary.DataAccess
         {
             var output = await GetSuggestionsAsync();
 
-            return output.Where(s => s.ApprovedForRelease).ToList();
+            return output.Where(s => s.approvedforrelease).ToList();
         }
 
         public async Task<Suggestion> GetSuggestionAsync(string id)
@@ -84,7 +84,7 @@ namespace SuggestionAppLibrary.DataAccess
             var output = await GetSuggestionsAsync();
 
             return output
-                    .Where(s => s.ApprovedForRelease == false && s.Rejected == false)
+                    .Where(s => s.approvedforrelease == false && s.rejected == false)
                     .ToList();
         }
 
@@ -100,12 +100,12 @@ namespace SuggestionAppLibrary.DataAccess
             //need to make this a transaction as will be updating two containers simultaneously
             var suggestion = await _container.ReadItemAsync<Suggestion>(suggestionid, _partitionKey);
 
-            bool isUpvote = suggestion.Resource.UserVotes.Add(user);
+            bool isUpvote = suggestion.Resource.uservotes.Add(user);
 
             //remember hash list only allows unique value pairs
             if (isUpvote == false)
             {
-                suggestion.Resource.UserVotes.Remove(user);
+                suggestion.Resource.uservotes.Remove(user);
             }
 
             //The below code is how you start a TRANSACTIONAL BATCH OPERTATION IN COSMOS DB
@@ -126,7 +126,7 @@ namespace SuggestionAppLibrary.DataAccess
                 {
                     await _container.UpsertItemAsync(model);
 
-                    var user = await _userData.GetUserAsync(model.Author.BasicUserId);
+                    var user = await _userData.GetUserAsync(model.author.BasicUserId);
                     user.AuthoredSuggestions.Add(new BasicSuggestion(model));
                     await _userData.UpdateUserAsync(user);
                 }

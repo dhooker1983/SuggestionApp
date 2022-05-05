@@ -1,0 +1,24 @@
+﻿@*
+using the authorise view component allows us to state that only users with the Admin policy can see the content inside it*@
+<AuthorizeView Policy="Admin">
+    <a href="/AdminApproval">
+        Admin
+    </a>
+</AuthorizeView>
+
+<AuthorizeView>
+    <Authorized>
+        <a href="/Profile">
+            Profile
+        </a>
+        <a href="MicrosoftIdentity/Account/SignOut">
+            Logout
+        </a>
+    </Authorized>
+
+    <NotAuthorized>
+        <a href="MicrosoftIdentity/Account/SignIn">
+            Login
+        </a>
+    </NotAuthorized>
+</AuthorizeView>

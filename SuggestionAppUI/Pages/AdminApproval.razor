@@ -1,9 +1,77 @@
 ﻿@page "/AdminApproval"
+@attribute [Authorize(Policy = "Admin")]
 @inject ISuggestionData suggestionData
 @inject IUserData userData
 @inject NavigationManager navManager
 
+<h1>Pending Submissions</h1>
 
+<div>
+    <div>@submissions?.Count Submission(s)</div>
+    <div>
+        <button class="btn btn-warning" @onclick="ClosePage">Close</button>
+    </div>
+</div>
+
+@if(submissions is not null)
+{
+    foreach(var s in submissions)
+    {
+        <div>
+            <div>
+                <button @onclick="(() => ApproveSubmission(s))" class="btn btn-primary m-1">Approve</button>
+                <button @onclick="(() => RejectSubmission(s))" class="btn btn-secondary m-1">Reject</button>
+            </div>
+            <div>
+                <div>
+                    @if(currentEditingTitle == s.suggestionid)
+                    {
+                        <EditForm Model="@editedTitle" OnSubmit="(() => SaveTitle(s))" >
+                            <InputText @bind-Value="editedTitle"/>
+                            <button type="submit" class="btn btn-primary">
+                                <span class="oi oi-check"></span>
+                            </button>
+                            <button @onclick="(() => currentEditingTitle = string.Empty)" class="btn btn-secondary">
+                                <span class="oi oi-x"></span>
+                            </button>
+                        </EditForm>
+                    }
+                    else
+                    {
+                        @s.suggestiontext
+                        <span class="oi oi-pencil" @onclick="(() => EditTitle(s))"></span>
+                    }
+                </div>
+                <div>
+                    @s.category.CategoryName
+                </div>
+                <div>
+                        <span>Display Name not set</span>
+                       @* @s.author.displayName*@
+                </div>
+                <div>
+                    @if(currentEditingDescription == s.suggestionid)
+                    {
+                        <EditForm Model="@editedDescription" OnSubmit="(() => SaveDescription(s))">
+                            <InputText @bind-Value="editedDescription" />
+                            <button type="submit" class="btn btn-primary">
+                                <span class="oi oi-check"></span>
+                            </button>
+                            <button @onclick="(() => currentEditingDescription = string.Empty)" class="btn btn-secondary">
+                                <span class="oi oi-x"></span>
+                            </button>
+                        </EditForm>
+                    }
+                    else
+                    {
+                        @s.description
+                        <span class="oi oi-pencil" @onclick="(() => EditDescription(s))"></span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}
 
 @code {
 
@@ -21,14 +89,14 @@
 
     private async Task ApproveSubmission(Suggestion submission)
     {
-        submission.ApprovedForRelease = true;
+        submission.approvedforrelease = true;
         submissions.Remove(submission);
         await suggestionData.UpdateSuggestionAsync(submission);
     }
 
     private async Task RejectSubmission(Suggestion submission)
     {
-        submission.ApprovedForRelease = false;
+        submission.approvedforrelease = false;
         submissions.Remove(submission);
         await suggestionData.UpdateSuggestionAsync(submission);
     }
@@ -36,15 +104,35 @@
     private void EditTitle(Suggestion model)
     {
         editingModel = model;
-        editedTitle = model.SuggestionText;
-        currentEditingTitle = model.SuggestionId;
+        editedTitle = model.suggestiontext;
+        currentEditingTitle = model.suggestionid;
         currentEditingDescription = "";
     }
 
     private async Task SaveTitle(Suggestion model)
     {
         currentEditingTitle = string.Empty;
-        model.SuggestionText = editedTitle;
+        model.suggestiontext = editedTitle;
         await suggestionData.UpdateSuggestionAsync(model);
+    }
+
+    private void EditDescription(Suggestion model)
+    {
+        editingModel = model;
+        editedDescription = model.description;
+        currentEditingTitle = "";
+        currentEditingDescription = model.suggestionid;
+    }
+
+    private async Task SaveDescription(Suggestion model)
+    {
+        currentEditingDescription = string.Empty;
+        model.description = editedDescription;
+        await suggestionData.UpdateSuggestionAsync(model);
+    }
+
+    private void ClosePage()
+    {
+        navManager.NavigateTo("/");
     }
 }

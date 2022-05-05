@@ -18,14 +18,14 @@
                         <div>@GetUpvoteBottomText()</div>
                     </div>
                     <div>
-                        <div>@model.DateCreated.ToString("MM.dd.yyyy")</div>
+                        <div>@model.datecreated.ToString("MM.dd.yyyy")</div>
                     </div>
                 </div>
                 <div>
-                    <div>@model.SuggestionText</div>
-                    <div>@*@model.Author.DisplayName*@Author Name</div>
-                    <div>@model.Description</div>
-                    <div>@model.Category.CategoryName</div>
+                    <div>@model.suggestiontext</div>
+                    <div>@*@model.author.DisplayName*@Author Name</div>
+                    <div>@model.description</div>
+                    <div>@model.category.CategoryName</div>
                 </div>
                 <div>
                     <button class="btn btn-primary" @onclick="ClosePage">Close</button>
@@ -35,17 +35,17 @@
     </div>
 </div>
 
-@if(model?.SuggestionStatus is not null)
+@if(model?.suggestionstatus is not null)
 {
     <div>
         <div>
             <div></div>
             <div>
                 <div>
-                    @model.SuggestionStatus.StatusName
+                    @model.suggestionstatus.StatusName
                 </div>
                 <div>
-                    @((MarkupString)model.OwnerNotes)
+                    @((MarkupString)model.ownernotes)
                 </div>
             </div>
         </div>
@@ -70,9 +70,9 @@
 
     private string GetUpvoteTopText()
     {
-        if(model.UserVotes?.Count > 0)
+        if(model.uservotes?.Count > 0)
         {
-            return model.UserVotes.Count.ToString("00");
+            return model.uservotes.Count.ToString("00");
         }
 
         else
@@ -83,7 +83,7 @@
 
     private string GetUpvoteBottomText()
     {
-        if(model.UserVotes?.Count > 1)
+        if(model.uservotes?.Count > 1)
         {
             return "Upvotes";
         }

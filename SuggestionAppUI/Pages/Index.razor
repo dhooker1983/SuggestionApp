@@ -1,5 +1,5 @@
 ﻿@page "/"
-
+@inject AuthenticationStateProvider authProvider
 @inject ICategoryData categoryData
 @inject IStatusData statusData
 @inject ISuggestionData suggestionData
@@ -40,17 +40,17 @@
                     </div>
                     <div>
                         <div @onclick="(() => OpenDetails(s))">
-                            @s.SuggestionText
+                            @s.suggestiontext
                         </div>
                         <div>
                             <div @onclick="(() => OpenDetails(s))">
-                            @s.Category?.CategoryName
+                            @s.category?.CategoryName
                             </div>
                         </div>
                     </div>
                     <div>
                         <div>
-                            @s.SuggestionStatus?.StatusName
+                            @s.suggestionstatus?.StatusName
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
 </div>
 
 @code {
-
+    private SuggestionAppLibrary.Models.User loggedInUser;
     private List<Category> categories;
     private List<Status> statuses;
     private List<Suggestion> suggestions;
@@ -106,7 +106,69 @@
     {
         categories = await categoryData.GetCategoriesAsync();
         statuses = await statusData.GetStatusesAsync();
-        suggestions = await suggestionData.GetAllApprovedSuggestionsAsync();
+        //suggestions = await suggestionData.GetAllApprovedSuggestionsAsync();
+        await LoadAndVerifyUser();
+    }
+
+    private async Task LoadAndVerifyUser()
+    {
+        var authState = await authProvider.GetAuthenticationStateAsync();
+        string objectId = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("objectidentifier"))?.Value;
+
+        if(string.IsNullOrWhiteSpace(objectId) == false)
+        {
+            loggedInUser = await userData.GetUserFromAuthentication(objectId) ?? new();
+
+            string firstName = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("givenname"))?.Value;
+            string lastName = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("surname"))?.Value;
+            string displayName = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("name"))?.Value;
+            string email = authState.User.Claims.FirstOrDefault(c => c.Type.Contains("email"))?.Value;
+
+            bool isDirty = false;
+
+            if(objectId.Equals(loggedInUser.ObjectIdentifier) == false)
+            {
+                isDirty = true;
+                loggedInUser.ObjectIdentifier = objectId;   
+            }
+
+            if(firstName.Equals(loggedInUser.FirstName) == false)
+            {
+                isDirty = true;
+                loggedInUser.FirstName = firstName;   
+            }
+
+            if(lastName.Equals(loggedInUser.LastName) == false)
+            {
+                isDirty = true;
+                loggedInUser.LastName = lastName;   
+            }
+
+            if(displayName.Equals(loggedInUser.DisplayName) == false)
+            {
+                isDirty = true;
+                loggedInUser.DisplayName = displayName;   
+            }
+
+            if(email.Equals(loggedInUser.Email) == false)
+            {
+                isDirty = true;
+                loggedInUser.Email = email;   
+            }
+
+            if (isDirty)
+            {
+                if(string.IsNullOrWhiteSpace(loggedInUser.UserId) == false)
+                {
+                    await userData.CreateUserAsync(loggedInUser);
+                }
+
+                else
+                {
+                    await userData.UpdateUserAsync(loggedInUser);
+                }
+            }
+        }
     }
 
     protected async override Task OnAfterRenderAsync(bool firstRender)
@@ -149,14 +211,14 @@
         if(selectedCategory!= "All")
         {
             output = output
-                        .Where(s => s.Category?.CategoryName == "selectedCategory")
+                        .Where(s => s.category?.CategoryName == "selectedCategory")
                         .ToList();
         }
 
         if(selectedStatus!= "All")
         {
             output = output
-                        .Where(s => s.SuggestionStatus?.StatusName == "selectedStatus")
+                        .Where(s => s.suggestionstatus?.StatusName == "selectedStatus")
                         .ToList();
         }
 
@@ -164,21 +226,21 @@
         {
             output = output
                         .Where(
-                            s => s.SuggestionText.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
-                            s.Description.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
+                            s => s.suggestiontext.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                            s.description.Contains(searchText, StringComparison.InvariantCultureIgnoreCase))
                         .ToList();
         }
 
         if (isSortedByNew)
         {
-            output = output.OrderByDescending(s => s.DateCreated)
+            output = output.OrderByDescending(s => s.datecreated)
                             .ToList();
         }
 
         else
         {
-            output = output.OrderByDescending(s => s.UserVotes.Count)
-                            .ThenByDescending(s => s.DateCreated)
+            output = output.OrderByDescending(s => s.uservotes.Count)
+                            .ThenByDescending(s => s.datecreated)
                             .ToList();
         }
 
@@ -213,9 +275,9 @@
 
     private string GetUpvoteTopText(Suggestion model)
     {
-        if(model.UserVotes?.Count > 0)
+        if(model.uservotes?.Count > 0)
         {
-            return model.UserVotes.Count.ToString("00");
+            return model.uservotes.Count.ToString("00");
         }
 
         else
@@ -226,7 +288,7 @@
 
     private string GetUpvoteBottomText(Suggestion model)
     {
-        if(model.UserVotes?.Count > 1)
+        if(model.uservotes?.Count > 1)
         {
             return "Upvotes";
         }
@@ -239,7 +301,7 @@
 
     private void OpenDetails(Suggestion model)
     {
-        navManager.NavigateTo($"/Details/{model.SuggestionId}");
+        navManager.NavigateTo($"/Details/{model.suggestionid}");
     }
 
     private void CreateCat()
